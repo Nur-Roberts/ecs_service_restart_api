@@ -1,15 +1,14 @@
 import boto3
+import os
 
 # initiate client
-ecs_client = boto3.client('ecs')
-
+ecs_client = boto3.client('ecs', region_name=os.environ["aws_region"])
 
 def restart_ecs_service(cluster_name,service_name):
     try:
-
         response = ecs_client.update_service(
-            cluster='ecs-lab-2-cluster',
-            service='worker',
+            cluster=cluster_name,
+            service=service_name,
             forceNewDeployment=True
         )
         rollout_state = response['service']['deployments'][0]['rolloutState']
