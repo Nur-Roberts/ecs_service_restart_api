@@ -1,7 +1,7 @@
 import boto3
 import os
 
-# initiate client
+# initiate aws client for ECS service
 ecs_client = boto3.client('ecs', region_name=os.environ["aws_region"])
 
 def restart_ecs_service(cluster_name,service_name):
@@ -9,7 +9,7 @@ def restart_ecs_service(cluster_name,service_name):
         response = ecs_client.update_service(
             cluster=cluster_name,
             service=service_name,
-            forceNewDeployment=True
+            forceNewDeployment=True #Trigger forced deployment which in essence replace the previous and result in a "restarted service"
         )
         rollout_state = response['service']['deployments'][0]['rolloutState']
         rollout_state_reason = response['service']['deployments'][0]['rolloutStateReason']
